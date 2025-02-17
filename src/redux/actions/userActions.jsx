@@ -4,7 +4,7 @@ import {
   USER_LOGIN_FAILURE,
   USER_LOGOUT,
 } from './types';
-import { userService } from '../../services/userService';
+import userService from '../../services/userService';
 
 export const loginRequest = () => ({ type: USER_LOGIN_REQUEST });
 export const loginSuccess = (user) => ({

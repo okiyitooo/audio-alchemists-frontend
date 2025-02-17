@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
+import {thunk} from 'redux-thunk';
 import { userReducer } from './reducers/userReducer';
 import { projectReducer } from './reducers/projectReducer';
 import { trackReducer } from './reducers/trackReducer';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid2, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { userService } from '../services/userService';
+import userService from '../services/userService';
 
 const Signup = () => {
     const navigate = useNavigate();
