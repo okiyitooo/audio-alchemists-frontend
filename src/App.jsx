@@ -5,6 +5,10 @@ import SignupPage from './pages/SignupPage';
 import Dashboard from './components/Dashboard';
 import ProjectPage from './pages/ProjectPage';
 import HomePage from './pages/HomePage';
+import CreateProjectPage from './pages/CreateProjectPage';
+import EditProjectPage from './pages/EditProjectPage';
+import TrackEditorPage from './pages/TrackEditorPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { ThemeProvider, createTheme } from '@mui/material';
 
 const theme = createTheme({

@@ -13,10 +13,10 @@ function ProjectView({ project, loading, error, getProject }) {
     }, [projectId, getProject]);
 
     if (loading) {
-        return 
+        return (
             <Box sx={{display: 'flex', justifyContent: 'center', mt: 4}}>
                 <CircularProgress />
-            </Box>;
+            </Box>);
     }
 
     if (error) {
