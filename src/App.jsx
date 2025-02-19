@@ -27,7 +27,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create-project" element={<CreateProjectPage />} />
+          <Route path="/projects/:id/edit" element={<EditProjectPage />} />
           <Route path="/projects/:id" element={<ProjectPage />} />
+          <Route path="/projects/:projectId/tracks/:trackId" element = {<TrackEditorPage/>}/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </ThemeProvider>

@@ -11,12 +11,19 @@ import {
     PROJECT_DELETE_REQUEST,
     PROJECT_DELETE_SUCCESS,
     PROJECT_DELETE_FAILURE,
+    PROJECT_GET_REQUEST,
+    PROJECT_GET_SUCCESS,
+    PROJECT_GET_FAILURE,
 } from './types';
 import { projectService } from '../../services/projectService'; // Assuming you have a projectService
 
 const createProjectRequest = () => ({ type: PROJECT_CREATE_REQUEST });
 const createProjectSuccess = (project) => ({ type: PROJECT_CREATE_SUCCESS, payload: project });
 const createProjectFailure = (error) => ({ type: PROJECT_CREATE_FAILURE, payload: error });
+
+const getProjectRequest = () => ({ type: PROJECT_GET_REQUEST });
+const getProjectSuccess = (project) => ({ type: PROJECT_GET_SUCCESS, payload: project });
+const getProjectFailure = (error) => ({ type: PROJECT_GET_FAILURE, payload: error });
 
 const getAllProjectsRequest = () => ({ type: PROJECT_GET_ALL_REQUEST });
 const getAllProjectsSuccess = (projects) => ({ type: PROJECT_GET_ALL_SUCCESS, payload: projects });
@@ -37,6 +44,16 @@ export const createProject = (projectData) => async (dispatch) => {
         dispatch(createProjectSuccess(project));
     } catch (error) {
         dispatch(createProjectFailure(error.message));
+    }
+};
+
+export const getProject = (projectId) => async (dispatch) => {
+    dispatch(getProjectRequest());
+    try {
+        const project = await projectService.getProject(projectId);
+        dispatch(getProjectSuccess(project));
+    } catch (error) {
+        dispatch(getProjectFailure(error.message));
     }
 };
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid2, Box, Alert } from '@mui/material';
+import { TextField, Button, Grid2, Box, Alert, CircularProgress } from '@mui/material';
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ loginUser, error }) => {
+const Login = ({ loginUser, error, loading }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -31,6 +31,7 @@ const Login = ({ loginUser, error }) => {
                         variant="outlined"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        disabled={loading}
                     />
                 </Grid2>
                 <Grid2 item xs={12}>
@@ -45,11 +46,12 @@ const Login = ({ loginUser, error }) => {
                         variant="outlined"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        disabled={loading}
                     />
                 </Grid2>
             </Grid2>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Login
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
+                {loading ? <CircularProgress size={24} /> : 'Login'}
             </Button>
             
             {error && <Alert severity="error">{error}</Alert>}
@@ -59,6 +61,7 @@ const Login = ({ loginUser, error }) => {
 
 const mapStateToProps = (state) => ({
     error: state.user.error, // get error from user reducer
+    loading: state.user.loading, // get loading status from user reducer
 });
 
 const mapDispatchToProps = {
