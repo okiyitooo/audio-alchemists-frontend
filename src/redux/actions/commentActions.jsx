@@ -9,7 +9,7 @@ import {
     COMMENT_DELETE_SUCCESS,
     COMMENT_DELETE_FAILURE,
   } from './types';
-  import { commentService } from '../../services/commentService';
+  import commentService from '../../services/commentService';
   
   // Action Creators
   const createCommentRequest = () => ({ type: COMMENT_CREATE_REQUEST });
@@ -25,10 +25,10 @@ import {
   const deleteCommentFailure = () => ({ type: COMMENT_DELETE_FAILURE });
   
   // Async Action Creators
-  export const createComment = (projectId, commentData, token) => async (dispatch) => {
+  export const createComment = (projectId, commentData) => async (dispatch) => {
     dispatch(createCommentRequest());
     try {
-      const comment = await commentService.createComment(projectId, commentData, token);
+      const comment = await commentService.createComment(projectId, commentData);
       dispatch(createCommentSuccess(comment));
       return true;
     } catch (error) {
@@ -37,10 +37,10 @@ import {
     }
   };
   
-  export const getAllComments = (projectId, token) => async (dispatch) => {
+  export const getAllComments = (projectId) => async (dispatch) => {
     dispatch(getAllCommentsRequest());
     try {
-      const comments = await commentService.getAllComments(projectId, token);
+      const comments = await commentService.getAllComments(projectId);
       dispatch(getAllCommentsSuccess(comments));
       return true;
     } catch (error) {
@@ -49,10 +49,10 @@ import {
     }
   };
   
-  export const deleteComment = (projectId, commentId, token) => async (dispatch) => {
+  export const deleteComment = (projectId, commentId) => async (dispatch) => {
     dispatch(deleteCommentRequest());
     try {
-      await commentService.deleteComment(projectId, commentId, token);
+      await commentService.deleteComment(projectId, commentId);
       dispatch(deleteCommentSuccess());
       return true;
     } catch (error) {

@@ -39,10 +39,10 @@ import {
   const deleteTrackFailure = () => ({ type: TRACK_DELETE_FAILURE });
   
   // Async Action Creators
-  export const createTrack = (projectId, trackData, token) => async (dispatch) => {
+  export const createTrack = (projectId, trackData) => async (dispatch) => {
     dispatch(createTrackRequest());
     try {
-      const track = await trackService.createTrack(projectId, trackData, token);
+      const track = await trackService.createTrack(projectId, trackData);
       dispatch(createTrackSuccess(track));
       return true;
     } catch (error) {
@@ -51,10 +51,10 @@ import {
     }
   };
   
-  export const getAllTracks = (projectId, token) => async (dispatch) => {
+  export const getAllTracks = (projectId) => async (dispatch) => {
     dispatch(getAllTracksRequest());
     try {
-      const tracks = await trackService.getAllTracks(projectId, token);
+      const tracks = await trackService.getAllTracks(projectId);
       dispatch(getAllTracksSuccess(tracks));
       return true;
     } catch (error) {
@@ -63,10 +63,10 @@ import {
     }
   };
   
-  export const getTrack = (projectId, trackId, token) => async (dispatch) => {
+  export const getTrack = (projectId, trackId) => async (dispatch) => {
     dispatch(getTrackRequest());
     try {
-      const track = await trackService.getTrack(projectId, trackId, token);
+      const track = await trackService.getTrack(projectId, trackId);
       dispatch(getTrackSuccess(track));
       return true;
     } catch (error) {
@@ -75,10 +75,10 @@ import {
     }
   };
   
-  export const updateTrack = (projectId, trackId, trackData, token) => async (dispatch) => {
+  export const updateTrack = (projectId, trackId, trackData) => async (dispatch) => {
     dispatch(updateTrackRequest());
     try {
-      const track = await trackService.updateTrack(projectId, trackId, trackData, token);
+      const track = await trackService.updateTrack(projectId, trackId, trackData);
       dispatch(updateTrackSuccess(track));
       return true;
     } catch (error) {
@@ -87,10 +87,10 @@ import {
     }
   };
   
-  export const deleteTrack = (projectId, trackId, token) => async (dispatch) => {
+  export const deleteTrack = (projectId, trackId) => async (dispatch) => {
     dispatch(deleteTrackRequest());
     try {
-      await trackService.deleteTrack(projectId, trackId, token);
+      await trackService.deleteTrack(projectId, trackId);
       dispatch(deleteTrackSuccess());
       return true;
     } catch (error) {

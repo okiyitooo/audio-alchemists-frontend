@@ -27,3 +27,15 @@ code {
   margin: 0 auto;
   padding: 16px;
 }
+
+/* elements with the .vf-stavenote class turn bright blue when you click on them and grow slightly bigger*/
+.vf-stavenote {
+  transition: all 0.2s;
+}
+.vf-stavenote:hover {
+  transform: scale(1.1);
+}
+.vf-stavenote:active {
+  fill: rgb(0, 255, 255);
+  color: #fff;
+}
