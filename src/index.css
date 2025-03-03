@@ -28,14 +28,21 @@ code {
   padding: 16px;
 }
 
-/* elements with the .vf-stavenote class turn bright blue when you click on them and grow slightly bigger*/
+/* elements with the .vf-stavenote class turn bright blue when you click on them, grow slightly bigger and stay active*/ 
 .vf-stavenote {
+  cursor: pointer;
   transition: all 0.2s;
 }
-.vf-stavenote:hover {
-  transform: scale(1.1);
-}
 .vf-stavenote:active {
-  fill: rgb(0, 255, 255);
-  color: #fff;
+  background-color: #0ff;
+  color: #0ff;
+  stroke: #0ff;
+  fill: #0ff;;
+  transform: scale(1.05);
+}
+.vf-stavenote:hover {
+  fill: #0ff;
+  stroke: #0ff;
+  background-color: #0ff;
+  color: #0ff;
 }

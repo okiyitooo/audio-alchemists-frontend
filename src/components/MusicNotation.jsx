@@ -1,6 +1,7 @@
 import { keys } from '@mui/system';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Vex, Factory } from 'vexflow';
+import './css/MusicNotation.css';
 
 function MusicNotation({musicData, onMusicDataChange}) {
     const staveDiv = useRef(null);
@@ -132,10 +133,12 @@ function MusicNotation({musicData, onMusicDataChange}) {
                 while (target && !target.classList?.contains('vf-stavenote')) {
                     target = target.parentElement;
                 }
+                console.log('Target:', target);
                 if (target?.classList?.contains('vf-stavenote')) {
                     const noteIndex = parseInt(target.getAttribute('id').split('-')[1]);
                     // set target as the focused element
                     target.focus();
+                    console.log(target)
                     setSelectedNote(noteIndex);
                 }
             };
@@ -160,7 +163,7 @@ function MusicNotation({musicData, onMusicDataChange}) {
     }, [musicData, onMusicDataChange, selectedNote]);
 
     return (
-        <div style={{'overflow': 'scroll'}}>
+        <div id="stave-container" style={{'overflow': 'scroll'}}>
             <div ref={staveDiv}></div>
         </div>
     );
