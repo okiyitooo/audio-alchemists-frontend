@@ -121,11 +121,9 @@ function MusicNotation({musicData, onMusicDataChange}) {
         voices.forEach(voice => voice.draw(context, staves[voices.indexOf(voice)]));
 
         if (staveDiv.current){
-            console.log('Adding click event listener');
             const svgElement = staveDiv.current.querySelector('svg');
             svgElement.setAttribute('overflow', 'scroll');
             svgElement.setAttribute('height', totalHeight);
-            console.log('SVG Element:', svgElement);
             if (!svgElement) return;
             svgElement.onclick = (e) => {
                 let target = e.target;
@@ -133,12 +131,10 @@ function MusicNotation({musicData, onMusicDataChange}) {
                 while (target && !target.classList?.contains('vf-stavenote')) {
                     target = target.parentElement;
                 }
-                console.log('Target:', target);
                 if (target?.classList?.contains('vf-stavenote')) {
                     const noteIndex = parseInt(target.getAttribute('id').split('-')[1]);
                     // set target as the focused element
                     target.focus();
-                    console.log(target)
                     setSelectedNote(noteIndex);
                 }
             };

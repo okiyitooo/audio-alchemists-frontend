@@ -7,7 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 function TrackEditor({track, loading, error, getTrack, updateTrack}) {
     const {projectId, trackId} = {id1:1,id2:2};
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [musicalSequence, setMusicalSequence] = useState(track?.musicalSequence);
         // eg. '[{"keys":["c/4", "e/4", "g/4"],"duration":"q"}, { "keys": ["d/4"], "duration": "q" },{ "keys": ["b/3"], "duration": "qr" },{ "keys": ["c/4", "f/4"], "duration": "8" },{ "keys": ["d/4"], "duration": "8" }]'
 
@@ -22,7 +22,10 @@ function TrackEditor({track, loading, error, getTrack, updateTrack}) {
     }, [track]);
 
     const handleSequenceChange = (e) => {
-        setMusicalSequence(musicalSequence+e);
+        setMusicalSequence(e.target.value);
+    }
+    const onMusicDataChange = (data) => {
+        setMusicalSequence(data);
     }
 
     const handleSave = async () => {
@@ -31,8 +34,8 @@ function TrackEditor({track, loading, error, getTrack, updateTrack}) {
             musicalSequence,
         };
         const success = await updateTrack(projectId, trackId, trackData);
-        // if (success)
-        //     navigate(`/projects/${projectId}`);
+        if (success)
+            navigate(`/projects/${projectId}`);
     }
 
     if (loading) {
@@ -53,7 +56,7 @@ function TrackEditor({track, loading, error, getTrack, updateTrack}) {
     return (
         <Box sx={{ mt: 4 }}>
             <Typography variant="h5" gutterBottom>Track Editor</Typography>
-            <MusicNotation musicData={musicalSequence} onMusicDataChange={handleSequenceChange} />
+            <MusicNotation musicData={musicalSequence} onMusicDataChange={onMusicDataChange} />
             <TextField
                 multiline
                 fullWidth

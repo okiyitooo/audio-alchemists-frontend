@@ -37,8 +37,8 @@ code {
   background-color: #0ff;
   color: #0ff;
   stroke: #0ff;
-  fill: #0ff;;
-  transform: scale(1.05);
+  fill: #0ff;
+  
 }
 .vf-stavenote:hover {
   fill: #0ff;
