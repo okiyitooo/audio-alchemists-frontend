@@ -14,6 +14,7 @@ import {
     TRACK_DELETE_REQUEST,
     TRACK_DELETE_SUCCESS,
     TRACK_DELETE_FAILURE,
+    TRACK_UPDATE_MUSIC_DATA
   } from './types';
   import { trackService } from '../../services/trackService';
   
@@ -37,6 +38,9 @@ import {
   const deleteTrackRequest = () => ({ type: TRACK_DELETE_REQUEST });
   const deleteTrackSuccess = () => ({ type: TRACK_DELETE_SUCCESS });
   const deleteTrackFailure = () => ({ type: TRACK_DELETE_FAILURE });
+
+  // actions
+  export const updateMusicData = (musicData) => ({ type: TRACK_UPDATE_MUSIC_DATA, payload: musicData });
   
   // Async Action Creators
   export const createTrack = (projectId, trackData) => async (dispatch) => {

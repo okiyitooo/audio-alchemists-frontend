@@ -1,167 +1,89 @@
-import { keys } from '@mui/system';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Vex, Factory } from 'vexflow';
+import Vex from 'vexflow';
 import './css/MusicNotation.css';
+import { TextField, Button, Select, MenuItem,  Box, Typography } from '@mui/material';
 
-function MusicNotation({musicData, onMusicDataChange}) {
+function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNoteClick}) {
     const staveDiv = useRef(null);
-    const [selectedNote, setSelectedNote] = useState(null);
-    const [notesData, setNotesData] = useState(()=>{
-        try {
-            return musicData ? JSON.parse(musicData):
-            [
-                { keys: ["c/4", "e/4", "g/4"], duration: "q" },
-                { keys: ["d/4"], duration: "q" },
-                { keys: ["b/3"], duration: "q" },
-                { keys: ["c/4", "f/4"], duration: "8" },
-                { keys: ["d/4"], duration: "8" },
-                { keys: ["e/4"], duration: "8" },
-                { keys: ["f/4"], duration: "8" },
-                { keys: ["g/4"], duration: "8" },
-            ];
-        } catch (error) {
-            console.error('Error parsing music data:', error);
-            return [];
-        }
-    });
     const VF = Vex.Flow;
 
-    const addNote = useCallback((key, duration) => {
-        const newNote = { keys: [key], duration };
-        setNotesData(prevNotesData => {
-            const newNotes = [...prevNotesData, newNote];
-            onMusicDataChange(JSON.stringify(newNotes));
-            return newNotes;
-        })
-        setSelectedNote(null);
-    }, [notesData, onMusicDataChange]);
-
-    const removeNote = useCallback((index) => {
-        setNotesData(prevNotesData => {
-            const newNotes = prevNotesData.filter((_, i) => i !== index);
-            onMusicDataChange(JSON.stringify(newNotes));
-            return newNotes;
-        });
-        setSelectedNote(null);
-    }, [notesData, onMusicDataChange]);
-
     useEffect(() => {
-        if (!staveDiv.current) return;
+        if (!staveDiv.current || musicData === null) return;
 
-
-        // clear existing notation
-        staveDiv.current.innerHTML = '';
-
-        // Create an SVG renderer and attach it to the DIV element
-        const renderer = new VF.Renderer(staveDiv.current, VF.Renderer.Backends.SVG);
-        
-        // Configure the rendering context.
-        const context = renderer.getContext();
-
-        // group notes into voices
-        const voices = [];
-        let currentVoice = new VF.Voice({num_beats: 4, beat_value: 4}).setMode(VF.Voice.Mode.FULL);
-        let currentTicks = 0;
-        notesData.forEach((noteInfo, index) => {
-            const note = new VF.StaveNote({
-                clef: 'treble',
-                keys: noteInfo.keys,
-                duration: noteInfo.duration,
-            });
-            note.setAttribute('id', index+'');
-            note.setAttribute('tabindex', index+'');
-            note.setAttribute('style', 'cursor: pointer');
-            // if duration is too long for current voice, create a new voice
-            const ticks = note.getTicks().value();
-            if (currentTicks + ticks <= 4096 * 4) {
-                currentVoice.addTickable(note);
-                currentTicks += ticks;
-            } else {
-                voices.push(currentVoice);
-                currentVoice = new VF.Voice({num_beats: 4, beat_value: 4}).setMode(VF.Voice.Mode.FULL);
-                currentVoice.addTickable(note);
-                currentTicks = ticks;
+        let notesData = [];
+        try {
+            notesData = JSON.parse(musicData);
+            if (!Array.isArray(notesData)) {
+                throw new Error("Music data is not an array");
             }
-        });
-        voices.push(currentVoice);
-
-        // one stave per voice
-        const staveWidth = 500;
-        const staveHeight = 100;
-        const numStaves = voices.length;
-        const staveSpacing = 10;
-        const staveHeightWithSpacing = staveHeight + staveSpacing;
-        const totalHeight = numStaves * staveHeightWithSpacing;
-        const staves = voices.map((voice, i) => {
-            const stave = new VF.Stave(20, staveHeightWithSpacing * i, staveWidth);
-            stave.setClef('treble').setTimeSignature('4/4');
-            stave.setContext(context).draw();
-            voice.setStave(stave);
-            return stave
-        });
-
-        const singleLeftConnector = new VF.StaveConnector(staves[0], staves[staves.length - 1])
-            .setType(VF.StaveConnector.type.SINGLE_LEFT)
-            .setContext(context)
-            .draw();
-
-        const braceConnector = new VF.StaveConnector(staves[0], staves[staves.length - 1])
-            .setType(VF.StaveConnector.type.BRACE)
-            .setContext(context)
-            .draw();
-
-        
-        // Resize the renderer to fit the staves
-        renderer.resize(600, totalHeight);
-
-        // Format and justify the notes to 500 pixels
-        const formatter = new VF.Formatter().joinVoices(voices).format(voices, staveWidth);
-
-        // Render voices
-        voices.forEach(voice => voice.draw(context, staves[voices.indexOf(voice)]));
-
-        if (staveDiv.current){
-            const svgElement = staveDiv.current.querySelector('svg');
-            svgElement.setAttribute('overflow', 'scroll');
-            svgElement.setAttribute('height', totalHeight);
-            if (!svgElement) return;
-            svgElement.onclick = (e) => {
-                let target = e.target;
-                // get parent element of target while classname is not vf-stavenote
-                while (target && !target.classList?.contains('vf-stavenote')) {
-                    target = target.parentElement;
-                }
-                if (target?.classList?.contains('vf-stavenote')) {
-                    const noteIndex = parseInt(target.getAttribute('id').split('-')[1]);
-                    // set target as the focused element
-                    target.focus();
-                    setSelectedNote(noteIndex);
-                }
-            };
+        } catch (error) {
+            console.error("Error parsing music data:", error);
+            return;
         }
 
-        // basic ui for adding notes
-        const addButton = document.createElement('button');
-        addButton.innerText = 'Add C4 Quarter ';
-        addButton.onclick = () => addNote('c/4', '8');
+        staveDiv.current.innerHTML = ''; // Clear previous content
+        const renderer = new VF.Renderer(staveDiv.current, VF.Renderer.Backends.SVG);
+        renderer.resize(600, 200);
+        const context = renderer.getContext();
+        context.setFont("Arial", 10).setBackgroundFillStyle("#eed");
 
-        const removeButton = document.createElement('button');
-        removeButton.innerText = 'Remove Note';
-        removeButton.onclick = () => {
-            if (selectedNote !== null) {
-                removeNote(selectedNote);
+        const stave = new VF.Stave(10, 40, 580);
+        stave.addClef(clef).addTimeSignature(timeSignature).setContext(context).draw();
+
+        const notes = notesData.length > 0 ? notesData.map((noteInfo, index) => {
+            try {
+                const staveNote = new VF.StaveNote(noteInfo);
+                staveNote.setAttribute('id', `vf-note-${index}`);
+                staveNote.setAttribute('data-index', index);
+                staveNote.setAttribute('class', 'vf-stavenote');
+                if (selectedNoteIndex === index) {
+                    staveNote.setAttribute('class', 'vf-stavenote selected');
+                }
+                staveNote.setContext(context).draw();
+                return staveNote;
+            } catch(noteError) {
+                console.error("Error creating note at index:", index, noteInfo, noteError);
+                return null;
             }
-        };
+        }).filter(note => note !== null) : [];
 
-        staveDiv.current.appendChild(addButton);
-        staveDiv.current.appendChild(removeButton);
-        
-    }, [musicData, onMusicDataChange, selectedNote]);
+        if (notes.length === 0) return; // No valid notes to draw
+        const voice = new VF.Voice({ num_beats: parseInt(timeSignature.split('/')[0]),  beat_value: parseInt(timeSignature.split('/')[1]) });
+        voice.addTickables(notes);
+        voice.setStrict(false);
+        try {
+            new VF.Formatter().joinVoices([voice]).format([voice], 500);
+        }   catch (error) {
+            console.error("VexFlow Formatter Error:", error);
+        }
+        voice.draw(context, stave);
+
+        const svgElement = staveDiv.current.querySelector('svg');
+        if (svgElement) {
+            const clickHandler = (event) => {
+                let target = event.target;
+                while (target && !target.classList.contains('vf-stavenote')) {
+                    target = target.parentElement;
+                }
+                if (target) {
+                    const index = parseInt(target.getAttribute('data-index'));
+                    if (!isNaN(index) && index >= 0 && index < notesData.length) 
+                        onNoteClick(index);
+                } else {
+                    onNoteClick(null); // Clear selection if no note is clicked
+                }
+                event.stopPropagation(); // Prevent event bubbling
+            };
+            svgElement.addEventListener('click', clickHandler);
+            return () => {
+                if (svgElement)
+                    svgElement.removeEventListener('click', clickHandler);
+            }
+        }
+    }, [musicData, clef, timeSignature, selectedNoteIndex, onNoteClick]);
 
     return (
-        <div id="stave-container" style={{'overflow': 'scroll'}}>
-            <div ref={staveDiv}></div>
-        </div>
+        <div ref={staveDiv} className="music-notation" style={{ width: '100%', overflow: 'auto'}}></div>
     );
 }
 

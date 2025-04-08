@@ -46,3 +46,11 @@ code {
   background-color: #0ff;
   color: #0ff;
 }
+.vf-stavenote.selected {
+  cursor: pointer;
+  transform: scale(1.1);
+  fill: #0ff;
+  stroke: #0ff;
+  background-color: #0ff;
+  color: #0ff;
+}

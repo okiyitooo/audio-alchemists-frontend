@@ -14,6 +14,7 @@ import {
     TRACK_DELETE_REQUEST,
     TRACK_DELETE_SUCCESS,
     TRACK_DELETE_FAILURE,
+    TRACK_UPDATE_MUSIC_DATA,
   } from '../actions/types';
 
 const initialState = {
@@ -61,7 +62,8 @@ const initialState = {
       case TRACK_UPDATE_FAILURE:
       case TRACK_DELETE_FAILURE:
         return { ...state, loading: false, error: action.payload };
-  
+      case TRACK_UPDATE_MUSIC_DATA:
+        return { ...state, musicData: action.payload };
       default:
         return state;
     }
