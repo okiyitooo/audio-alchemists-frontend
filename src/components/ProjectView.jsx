@@ -56,4 +56,4 @@ const mapDispatchToProps = {
 };
 
 
-export default connect(mapStateToProps, { getProject })(ProjectView);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectView);

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { Container, Typography, Box, CircularProgress, List, ListItem, ListItemText, Button, Alert } from '@mui/material';
+import { Grid2, Container, Typography, Box, CircularProgress, List, ListItem, ListItemText, Button, Alert, Paper } from '@mui/material';
 import { connect } from 'react-redux';
 import { getAllProjects, clearSearchResults } from '../redux/actions/projectActions';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import SearchResultsList from './SearchResultList';
+import RecommendedUsers from './RecommendedUsers';
+import RecommendedProjects from './RecommendedProjects';
 
 function Dashboard({ projects, loading, error, getAllProjects, clearSearchResults }) {
     useEffect(() => {
@@ -33,7 +35,6 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
         if (!loading && projects || projects.length === 0) {
             return (
                 <Typography variant="h6">No projects found. Create One!</Typography>
-                    
             );
         }
 
@@ -57,14 +58,23 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
                 <Typography variant="h5" gutterBottom>Dashboard</Typography>
                 <SearchBar />
                 <SearchResultsList />
-                {
-                <Box sx={{ mt: 4, pt: 2, width: '100%', maxWidth: 360, borderBottom: '1px solid #eee', bgcolor: 'background.paper' }}>
-                    <Typography variant="subtitle2" sx={{ p: 1, backgroundColor: '#f9f9f9' }}>Your Projects:</Typography>
-                    {renderProjectList()}
-                </Box>
-                }
-                <Button variant="contained" color="primary" component={Link} to="/create-project" sx={{mt: 2}}>Create Project</Button>
-                {/* Add more dashboard content here (e.g., list of projects) */}
+                <Grid2 container spacing={2} sx={{ mt: 4 }}>
+                    <Grid2 item xs={12} md={8}>
+                        <Paper elevation={1} sx={{ p: 2, mt: 3 }}>
+                            <Typography variant="subtitle2" sx={{ p: 1, backgroundColor: '#f9f9f9' }}>Your Projects:</Typography>
+                            {renderProjectList()}
+                            <Button variant="contained" color="primary" component={Link} to="/create-project" sx={{mt: 2}}>Create Project</Button>
+                        </Paper>
+                    </Grid2>
+                    {/* Recommendedations */}
+                    <Grid2 item xs={12} md={4}>
+                        <Box sx={{ p: 2, backgroundColor: '#f5f5f5', borderRadius: 1, height: '100%' }}>
+                            <RecommendedUsers />
+                            <RecommendedProjects />
+                        </Box>
+                    </Grid2>
+                    {/* Add more dashboard content here (e.g., list of projects) */}
+                </Grid2>
             </Box>
         </Container>
     );
