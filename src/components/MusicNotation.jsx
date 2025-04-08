@@ -1,7 +1,6 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Vex from 'vexflow';
 import './css/MusicNotation.css';
-import { TextField, Button, Select, MenuItem,  Box, Typography } from '@mui/material';
 
 function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNoteClick}) {
     const staveDiv = useRef(null);
@@ -80,7 +79,7 @@ function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNot
                     svgElement.removeEventListener('click', clickHandler);
             }
         }
-    }, [musicData, clef, timeSignature, selectedNoteIndex, onNoteClick]);
+    }, [musicData, clef, timeSignature, selectedNoteIndex, onNoteClick, staveDiv, VF]);
 
     return (
         <div ref={staveDiv} className="music-notation" style={{ width: '100%', overflow: 'auto'}}></div>

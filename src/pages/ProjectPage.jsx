@@ -50,8 +50,8 @@ const mapStateToProps = (state) => {
     };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => ({
     getProject
-}
+})
 
-export default ProjectPage;
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPage);

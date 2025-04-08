@@ -68,4 +68,4 @@ const mapDispatchToProps = {
     getProject,
 };
 
-export default EditProjectPage;
+export default connect(mapStateToProps, mapDispatchToProps)(EditProjectPage);

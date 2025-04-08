@@ -1,4 +1,3 @@
-import { version } from 'react';
 import {
     PROJECT_GET_REQUEST,
     PROJECT_GET_SUCCESS,

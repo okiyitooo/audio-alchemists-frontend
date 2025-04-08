@@ -27,7 +27,7 @@ export const userReducer = (state = initialState, action) => {
           ...state,
           user: {
             ...state.user,
-            following: [...state.user.following, action.payload], // Assuming payload is the followed user object
+            following: [...state.user.following, action.payload], // Payload is the followed user's ID 
           },
         };
     case UNFOLLOW_USER_SUCCESS:
@@ -36,7 +36,7 @@ export const userReducer = (state = initialState, action) => {
           ...state,
           user: {
             ...state.user,
-            following: state.user.following.filter((id) => id !== action.payload), // Assuming payload is the unfollowed user object
+            following: state.user.following.filter((id) => id !== action.payload), // Payload is the unfollowed user's ID
           },
         };
     default:

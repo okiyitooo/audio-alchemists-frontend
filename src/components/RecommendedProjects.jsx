@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Typography, List, ListItem, ListItemText, CircularProgress, Alert, Paper } from '@mui/material';
+import { Typography, List, ListItem, ListItemText, CircularProgress, Alert, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { fetchProjectRecommendations } from '../redux/actions/recommendationActions';
 
