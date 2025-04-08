@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef, use } from 'react';
-import { Typography, Box, Button, CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Paper, Grid2, Stack } from '@mui/material';
+import React, { useState, useEffect, useCallback, } from 'react';
+import { Typography, Box, Button, CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Paper, Grid, Stack } from '@mui/material';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import MusicNotation from './MusicNotation';
 import { getTrack, updateTrack, updateMusicData } from '../redux/actions/trackActions';
@@ -12,7 +12,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
     
     const loading = useSelector(state => state.track.loading);
     const error = useSelector(state => state.track.error);
-    const track = trackFromProps || useSelector(state => state.track.track);
+    const track = trackFromProps
 
     const [selectedNoteIndex, setSelectedNoteIndex] = useState(null);
     const [newKey, setNewKey] = useState('');
@@ -43,7 +43,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
 
     const handleMusicDataChange = useCallback((newMusicData) => {
         dispatch(updateMusicData(JSON.stringify(newMusicData)));
-    }, [dispatch]);
+    }, [dispatch, updateMusicData]);
 
     const handleNoteClick = useCallback((noteIndex) => {
         setSelectedNoteIndex(prevIndex => prevIndex === noteIndex ? null : noteIndex);
@@ -107,7 +107,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
             console.error("Error parsing music data:", error);
         }
 
-    }, [selectedNoteIndex, newKey, newDuration, musicData, handleMusicDataChange, selectedNoteIndex]);
+    }, [selectedNoteIndex, newKey, newDuration, musicData, handleMusicDataChange]);
     
     const handleSave = () => {
         if (!track || !musicData) return;
@@ -155,8 +155,8 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                 />
             </Paper>
                 {/* Controls section */}
-            <Grid2 container spacing={2} sx={{ mb: 2 }}>
-                <Grid2 xs={12} md={4}>
+            <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid xs={12} md={4}>
                     <Paper elevation={1} sx={{ p: 2 }}>
                         <Typography variant="h6" gutterBottom>Settings</Typography>
                         <Stack spacing={2}>
@@ -198,8 +198,8 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                             </FormControl>
                         </Stack>
                     </Paper>
-                </Grid2>
-                <Grid2 xs={12} md={4}>
+                </Grid>
+                <Grid xs={12} md={4}>
                     <Paper elevation={1} sx={{ p: 2 }}>
                         <Typography variant="h6" gutterBottom >Add note</Typography>
                         <Stack spacing={2}>
@@ -229,8 +229,8 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                             <Button variant="contained" onClick={() => addNote(keyToAdd, durationToAdd)}>Add Note</Button>
                         </Stack>
                     </Paper>
-                </Grid2>
-                <Grid2 item xs={12} md={4}>
+                </Grid>
+                <Grid item xs={12} md={4}>
                     <Paper elevation={1} sx={{ p: 2, mt: 2 }}>
                         <Typography variant="h6" gutterBottom>Edit/Remove</Typography>
                         <Stack spacing={2}>
@@ -266,8 +266,8 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                             )}
                         </Stack>
                     </Paper>
-                </Grid2>
-            </Grid2>
+                </Grid>
+            </Grid>
             {/* Save button */}
             <Button variant="contained" color="primary" onClick={handleSave} sx={{ mt: 3}} disabled={loading}>{loading ? <CircularProgress size = {24}/> : 'Save'}</Button>
             {loading ? <CircularProgress size={24} color="inherit"/> : 'Save Track'}

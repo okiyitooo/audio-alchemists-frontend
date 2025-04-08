@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid2, Box, Alert, CircularProgress } from '@mui/material';
+import { TextField, Button, Grid, Box, Alert, CircularProgress } from '@mui/material';
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 import { useNavigate } from 'react-router-dom';
@@ -19,8 +19,8 @@ const Login = ({ loginUser, error, loading }) => {
 
     return (
         <Box sx={{mt: 2}} component="form" noValidate onSubmit={handleSubmit}>
-            <Grid2 container spacing={2}>
-                <Grid2 item xs={12}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -33,8 +33,8 @@ const Login = ({ loginUser, error, loading }) => {
                         onChange={(e) => setUsername(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -48,8 +48,8 @@ const Login = ({ loginUser, error, loading }) => {
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-            </Grid2>
+                </Grid>
+            </Grid>
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
                 {loading ? <CircularProgress size={24} /> : 'Login'}
             </Button>

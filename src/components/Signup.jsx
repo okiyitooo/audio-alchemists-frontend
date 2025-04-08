@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid2, Box, Alert, CircularProgress } from '@mui/material';
+import { TextField, Button, Grid, Box, CircularProgress, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import userService from '../services/userService';
 
@@ -21,6 +21,7 @@ const Signup = () => {
             await userService.register(username, email, password);
             navigate('/login');
         } catch (error) {
+            setError(error || 'Signup failed. Please try again.');
             console.error('Signup error:', error);
         } finally {
             setLoading(false);
@@ -33,8 +34,8 @@ const Signup = () => {
             component="form"
             noValidate
             onSubmit={handleSubmit}>
-            <Grid2 container spacing={2}>
-                <Grid2 item xs={12}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -47,8 +48,8 @@ const Signup = () => {
                         onChange={(e) => setUsername(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -61,8 +62,8 @@ const Signup = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -76,8 +77,8 @@ const Signup = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -93,8 +94,8 @@ const Signup = () => {
                         error={password !== confirmPassword}
                         helperText={password !== confirmPassword ? 'Passwords do not match' : ''}
                     />
-                </Grid2>
-            </Grid2>
+                </Grid>
+            </Grid>
             <Button
                 type="submit"
                 fullWidth
@@ -102,6 +103,10 @@ const Signup = () => {
                 sx={{ mt: 3, mb: 2 }}
                 disabled={loading || password !== confirmPassword}>
                 {loading ? <CircularProgress size={24} /> : 'Signup'}</Button>
+            {error && 
+            <Box sx={{ color: 'red', mt: 2 }}>
+                <Alert severity="error">{error}</Alert>
+            </Box>}
         </Box>
     );
 };

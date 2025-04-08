@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Grid2, Box, CircularProgress, Alert } from '@mui/material';
+import { TextField, Button, Grid, Box, CircularProgress } from '@mui/material';
 import { connect } from 'react-redux';
 import { updateProject } from '../redux/actions/projectActions';
 import { useNavigate } from 'react-router-dom';
@@ -34,8 +34,8 @@ function EditProjectForm({ project, updateProject, loading, error }) {
 
     return (
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
-            <Grid2 container spacing={2}>
-                <Grid2 item xs={12}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
                     <TextField
                         required
                         fullWidth
@@ -48,8 +48,8 @@ function EditProjectForm({ project, updateProject, loading, error }) {
                         onChange={(e) => setTitle(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         fullWidth
                         id="description"
@@ -60,8 +60,8 @@ function EditProjectForm({ project, updateProject, loading, error }) {
                         onChange={(e) => setDescription(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         fullWidth
                         id="genre"
@@ -72,8 +72,8 @@ function EditProjectForm({ project, updateProject, loading, error }) {
                         onChange={(e) => setGenre(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-                <Grid2 item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
                         fullWidth
                         id="tempo"
@@ -84,8 +84,8 @@ function EditProjectForm({ project, updateProject, loading, error }) {
                         onChange={(e) => setTempo(e.target.value)}
                         disabled={loading}
                     />
-                </Grid2>
-            </Grid2>
+                </Grid>
+            </Grid>
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
                 {loading ? <CircularProgress size={24} /> : 'Update Project'}
             </Button>

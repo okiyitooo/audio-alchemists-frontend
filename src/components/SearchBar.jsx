@@ -4,7 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear'; // For clearing the input
 import { useDispatch } from 'react-redux';
 import { searchProjects, clearSearchResults } from '../redux/actions/projectActions';
-import { debounce } from 'lodash'; // Install: npm install lodash
+import { debounce } from 'lodash';
 
 function SearchBar() {
     const [query, setQuery] = useState('');
@@ -12,7 +12,7 @@ function SearchBar() {
 
     // Debounced search function
     const debouncedSearch = useCallback(
-        debounce((searchQuery) => {
+        ()=>debounce((searchQuery) => {
             if (searchQuery.trim()) {
                 dispatch(searchProjects(searchQuery));
             } else {
