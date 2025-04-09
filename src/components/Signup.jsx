@@ -10,7 +10,7 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
 
 
     const handleSubmit = async (e) => {
@@ -21,7 +21,7 @@ const Signup = () => {
             await userService.register(username, email, password);
             navigate('/login');
         } catch (error) {
-            setError(error || 'Signup failed. Please try again.');
+            setError(error.message || 'Signup failed. Please try again.');
             console.error('Signup error:', error);
         } finally {
             setLoading(false);

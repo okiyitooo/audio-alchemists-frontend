@@ -22,7 +22,7 @@ export const userReducer = (state = initialState, action) => {
       localStorage.removeItem('token');
       return initialState; // Reset state on logout
     case FOLLOW_USER_SUCCESS:
-      if (state.user && !state.user.following?.includes(action.payload))
+      if (!state.user?.following?.includes(action.payload))
         return {
           ...state,
           user: {
@@ -30,8 +30,9 @@ export const userReducer = (state = initialState, action) => {
             following: [...state.user.following, action.payload], // Payload is the followed user's ID 
           },
         };
+        return state;
     case UNFOLLOW_USER_SUCCESS:
-      if (state.user && state.user.following?.includes(action.payload))
+      if (state.user?.following?.includes(action.payload))
         return {
           ...state,
           user: {
@@ -39,6 +40,7 @@ export const userReducer = (state = initialState, action) => {
             following: state.user.following.filter((id) => id !== action.payload), // Payload is the unfollowed user's ID
           },
         };
+        return state;
     default:
       return state;
   }
