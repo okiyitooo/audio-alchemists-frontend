@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Box, CircularProgress, Alert } from '@mui/material';
+import { TextField, Button, Grid, Box, CircularProgress, Alert, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import userService from '../services/userService';
 
@@ -8,17 +8,21 @@ const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         try {
-            await userService.register(username, email, password);
+            await userService.register({username, email, password, role});
             navigate('/login');
         } catch (error) {
             setError(error.message || 'Signup failed. Please try again.');
@@ -56,6 +60,7 @@ const Signup = () => {
                         id="email"
                         label="Email Address"
                         name="email"
+                        type="email"
                         autoComplete="email"
                         variant="outlined"
                         value={email}
@@ -95,6 +100,25 @@ const Signup = () => {
                         helperText={password !== confirmPassword ? 'Passwords do not match' : ''}
                     />
                 </Grid>
+                {/* --- Role Selection --- */}
+                <Grid item xs={12}>
+                    <FormControl component="fieldset" disabled={loading}> {/* Wrap in FormControl */}
+                        <FormLabel component="legend">Select Role</FormLabel> {/* Add a label */}
+                        <RadioGroup
+                            row // Display radios horizontally
+                            aria-label="role"
+                            name="role-radio-group"
+                            value={role} // Controlled component
+                            onChange={handleRoleChange} // Use the handler
+                        >
+                            <FormControlLabel value="USER" control={<Radio />} label="User" />
+                            <FormControlLabel value="COMPOSER" control={<Radio />} label="Composer" />
+                            {/* <FormControlLabel value="ADMIN" control={<Radio />} label="Admin" /> */}
+                        </RadioGroup>
+                    </FormControl>
+                </Grid>
+                {/* --- End Role Selection --- */}
+
             </Grid>
             <Button
                 type="submit"

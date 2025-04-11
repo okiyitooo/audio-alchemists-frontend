@@ -1,10 +1,9 @@
-import axios from 'axios';
-import { API_BASE_URL, getAuthHeader } from '../utils/authutils';
+import { api, getAuthHeader, API_BASE_URL } from '../utils/authutils';
 
 const commentService = {
   createComment: async (projectId, commentData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/projects/${projectId}/comments`, commentData, {
+      const response = await api.post(`${API_BASE_URL}/projects/${projectId}/comments`, commentData, {
         headers: { Authorization: getAuthHeader() },
       });
       return response.data;
@@ -15,7 +14,7 @@ const commentService = {
 
   getAllComments: async (projectId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/projects/${projectId}/comments`, {
+      const response = await api.get(`${API_BASE_URL}/projects/${projectId}/comments`, {
         headers: { Authorization: getAuthHeader() },
       });
       return response.data;
@@ -26,7 +25,7 @@ const commentService = {
 
   deleteComment: async (projectId, commentId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/projects/${projectId}/comments/${commentId}`, {
+      const response = await api.delete(`${API_BASE_URL}/projects/${projectId}/comments/${commentId}`, {
         headers: { Authorization: getAuthHeader() },
       });
       return response.data;

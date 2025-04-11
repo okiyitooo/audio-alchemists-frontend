@@ -21,9 +21,9 @@ function CreateProjectForm({createProject, loading, error}) {
             genre,
             tempo: parseInt(tempo),
         };
-        const success = await createProject(projectData);
-        if (success)
-            navigate('/dashboard');
+        console.log("createProject",createProject)
+        await createProject(projectData);
+        navigate('/dashboard');
     }
 
     return (

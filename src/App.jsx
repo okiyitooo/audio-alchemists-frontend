@@ -13,6 +13,7 @@ import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import Layout from './components/Layout';
 
 const theme = createTheme({
+  
   palette: {
     primary: {
       main: '#3f51b5', // primary color (Indigo)
@@ -50,13 +51,23 @@ const theme = createTheme({
 });
 
 function App() {
+  // if the user is logged in, '/' should be the dashboard
+  // if the user is not logged in, '/' should be the home page
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Layout>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            {localStorage.getItem('token') ? 
+            (
+              <Route path="/" element={<Dashboard />} />
+            )
+            : 
+            (
+              <Route path="/" element={<HomePage />} />
+            )}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/dashboard" element={<Dashboard />} />

@@ -54,6 +54,7 @@ function VersionHistoryList({
     };
 
     if (loading) {
+        console.log("loading")
         return <CircularProgress size={20} />;
     }
 

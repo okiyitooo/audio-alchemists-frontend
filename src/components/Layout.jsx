@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/actions/userActions';
 
 function Layout({ children }) {
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => {
+        return state.user.user
+    });
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ function Layout({ children }) {
                     {user ? (
                         <>
                             <Button component={Link} to="/dashboard" color="inherit">Dashboard</Button>
-                            <Button onClick={handleLogout} color="inherit">Logout ({user.username})</Button>
+                            <Button onClick={handleLogout} color="inherit">Logout {user.username}</Button>
                         </>
                     ) : (
                         <>

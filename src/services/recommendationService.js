@@ -1,10 +1,9 @@
-import axios from 'axios';
-import { API_BASE_URL, getAuthHeader } from '../utils/authutils';
+import { api, API_BASE_URL, getAuthHeader } from '../utils/authutils';
 
 export const recommendationService = {
     getProjectRecommendations: async (limit = 5) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/recommendations/projects?limit=${limit}`, {
+            const response = await api.get(`${API_BASE_URL}/recommendations/projects?limit=${limit}`, {
                 headers: getAuthHeader(),
             });
             return response.data;
@@ -16,7 +15,7 @@ export const recommendationService = {
 
     getUserRecommendations: async (limit = 5) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/recommendations/users?limit=${limit}`, {
+            const response = await api.get(`${API_BASE_URL}/recommendations/users?limit=${limit}`, {
                 headers: getAuthHeader(),
             });
             return response.data;

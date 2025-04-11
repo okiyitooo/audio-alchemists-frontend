@@ -1,10 +1,9 @@
-import axios from 'axios';
-import { API_BASE_URL, getAuthHeader } from '../utils/authutils';
+import { API_BASE_URL, getAuthHeader, api } from '../utils/authutils';
 
 export const trackService = {
     createTrack: async (projectId, trackData) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/projects/${projectId}/tracks`, trackData, {
+            const response = await api.post(`${API_BASE_URL}/projects/${projectId}/tracks`, trackData, {
                 headers: getAuthHeader()
             });
             return response.data;
@@ -14,7 +13,7 @@ export const trackService = {
     },
     getAllTracks: async (projectId) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/projects/${projectId}/tracks`, {
+            const response = await api.get(`${API_BASE_URL}/projects/${projectId}/tracks`, {
                 headers: getAuthHeader()
             });
             return response.data;
@@ -24,7 +23,7 @@ export const trackService = {
     },
     getTrack: async (projectId, trackId) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/projects/${projectId}/tracks/${trackId}`, {
+            const response = await api.get(`${API_BASE_URL}/projects/${projectId}/tracks/${trackId}`, {
                 headers: getAuthHeader()
             });
             return response.data;
@@ -34,7 +33,7 @@ export const trackService = {
     },
     updateTrack: async (projectId, trackId, trackData) => {
         try {
-            const response = await axios.put(`${API_BASE_URL}/projects/${projectId}/tracks/${trackId}`, trackData, {
+            const response = await api.put(`${API_BASE_URL}/projects/${projectId}/tracks/${trackId}`, trackData, {
                 headers: getAuthHeader()
             });
             return response.data;
@@ -44,7 +43,7 @@ export const trackService = {
     },
     deleteTrack: async (projectId, trackId) => {
         try {
-            await axios.delete(`${API_BASE_URL}/projects/${projectId}/tracks/${trackId}`, {
+            await api.delete(`${API_BASE_URL}/projects/${projectId}/tracks/${trackId}`, {
                 headers: getAuthHeader()
             });
         } catch (error) {

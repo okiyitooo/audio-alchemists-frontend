@@ -6,7 +6,7 @@ import { fetchProjectRecommendations } from '../redux/actions/recommendationActi
 
 function RecommendedProjects() {
     const dispatch = useDispatch();
-    const { projectRecs, projectRecsLoading, projectRecsError } = useSelector((state) => state.recommendations);
+    const { projectRecs, projectRecsLoading, projectRecsError } = useSelector((state) => state.recommendation);
 
     useEffect(() => {
         dispatch(fetchProjectRecommendations()); // Fetch on mount

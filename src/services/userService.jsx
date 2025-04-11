@@ -1,19 +1,21 @@
-import axios from "axios";
-import { API_BASE_URL } from "../utils/authutils";
+import { API_BASE_URL, api } from "../utils/authutils";
 
 const userService = {
-    login: async (username, password) => {
+    login: async (loginDto) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/auth/login`, { usernameOrEmail: username, password });
+            const response = await api.post(`${API_BASE_URL}/auth/login`, { usernameOrEmail: loginDto.username, password: loginDto.password });
+            const { username } = loginDto;
             localStorage.setItem('token', response.data.accessToken);
-            return {username};
+            console.log("Login successful:", response.data);
+            console.log("Username:", username);
+            return username;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to login');
         }
     },
-    register: async (username, email, password) => {
+    register: async (user) => {
         try {
-            await axios.post(`${API_BASE_URL}/auth/register`, { username, email, password, role: 'USER' });
+            await api.post(`${API_BASE_URL}/auth/register`, user);
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to Signup');
         }

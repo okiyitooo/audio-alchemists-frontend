@@ -32,7 +32,7 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
             )
         }
 
-        if (!loading && (projects || projects.length === 0)) {
+        if (!loading && (!projects || projects.length === 0)) {
             return (
                 <Typography variant="h6">No projects found. Create One!</Typography>
             );
@@ -59,7 +59,7 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
                 <SearchBar />
                 <SearchResultsList />
                 <Grid container spacing={2} sx={{ mt: 4 }}>
-                    <Grid item xs={12} md={8}>
+                    <Grid>
                         <Paper elevation={1} sx={{ p: 2, mt: 3 }}>
                             <Typography variant="subtitle2" sx={{ p: 1, backgroundColor: '#f9f9f9' }}>Your Projects:</Typography>
                             {renderProjectList()}
@@ -67,7 +67,7 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
                         </Paper>
                     </Grid>
                     {/* Recommendedations */}
-                    <Grid item xs={12} md={4}>
+                    <Grid>
                         <Box sx={{ p: 2, backgroundColor: '#f5f5f5', borderRadius: 1, height: '100%' }}>
                             <RecommendedUsers />
                             <RecommendedProjects />

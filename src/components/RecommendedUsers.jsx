@@ -7,7 +7,7 @@ import { followUser, unfollowUser } from '../redux/actions/followActions';
 
 function RecommendedUsers() {
     const dispatch = useDispatch();
-    const { userRecs, userRecsLoading, userRecsError } = useSelector((state) => state.recommendations);
+    const { userRecs, userRecsLoading, userRecsError } = useSelector((state) => state.recommendation);
     const { user: currentUser } = useSelector((state) => state.user);
     // 'followingInProgress' is managed by a combined reducer under 'follow' key
     const { followingInProgress } = useSelector((state) => state.follow);
