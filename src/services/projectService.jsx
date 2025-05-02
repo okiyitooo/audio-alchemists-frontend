@@ -66,7 +66,7 @@ export const projectService = {
         const response = await api.post(`${API_BASE_URL}/projects/${projectId}/versions`,
           { description }, // Send description object as JSON body
         );
-        // Backend returns 201 Created with no body, or potentially the new ProjectVersionDto
+        // Backend returns 201 Created with the new ProjectVersionDto
         return response.data; // Return data if backend sends it, otherwise this might be empty/null
       } catch (error) {
         console.error("API Error saveNewVersion:", error.response || error);

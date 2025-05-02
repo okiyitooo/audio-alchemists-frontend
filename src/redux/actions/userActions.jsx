@@ -18,10 +18,10 @@ export const loginFailure = (error) => ({
 
 export const logoutUser = () => ({ type: USER_LOGOUT });
 
-export const loginUser = (username, password) => async (dispatch) => {
+export const loginUser = ({username, password}) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const user = await userService.login(username, password);
+    const user = await userService.login({username, password});
     dispatch(loginSuccess(user));
     return true; // indicate success
   } catch (error) {

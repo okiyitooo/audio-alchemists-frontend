@@ -7,15 +7,8 @@ import { connect } from 'react-redux';
 import { getProjectVersions, revertToVersion } from '../redux/actions/projectActions';
 import { format } from 'date-fns'; // For formatting timestamps
 
-function VersionHistoryList({
-    projectId,
-    versions,
-    loading,
-    reverting,
-    versionError,
-    revertError,
-    getProjectVersions,
-    revertToVersion
+function VersionHistoryList({ projectId, versions, loading, reverting, versionError, 
+    revertError, getProjectVersions, revertToVersion
 }) {
     const [revertConfirmOpen, setRevertConfirmOpen] = useState(false);
     const [versionToRevert, setVersionToRevert] = useState(null); // Store { id, timestamp }
@@ -54,7 +47,6 @@ function VersionHistoryList({
     };
 
     if (loading) {
-        console.log("loading")
         return <CircularProgress size={20} />;
     }
 
@@ -86,7 +78,7 @@ function VersionHistoryList({
                             }
                         >
                             <ListItemText
-                                primary={`${formatDate(version.timestamp)} ${version.description ? `- ${version.description}` : ''}`}
+                                primary={`${formatDate(version.timeStamp)} ${version.description ? `- ${version.description}` : ''}`}
                                 secondary={`Saved by: ${version.savedByUsername || 'Unknown'}`}
                             />
                         </ListItem>
@@ -105,7 +97,7 @@ function VersionHistoryList({
                 <DialogContent>
                     <DialogContentText>
                         Are you sure you want to revert the project to the version saved at{' '}
-                        <strong>{versionToRevert ? formatDate(versionToRevert.timestamp) : ''}</strong>?
+                        <strong>{versionToRevert ? formatDate(versionToRevert.timeStamp) : ''}</strong>?
                         Any changes made after this version will be lost.
                     </DialogContentText>
                 </DialogContent>
@@ -122,10 +114,10 @@ function VersionHistoryList({
 
 const mapStateToProps = (state) => ({
     versions: state.project.versions,
-    loading: state.project.loading, 
-    reverting: state.project.reverting,
+    loading: state.project.versionsLoading, 
+    reverting: state.project.isSavingVersion,
     versionError: state.project.versionError,
-    revertError: state.project.revertError,
+    revertError: state.project.saveVersionError,
 });
 
 const mapDispatchToProps = {

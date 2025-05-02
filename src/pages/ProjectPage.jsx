@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import ProjectView from '../components/ProjectView';
 import { useParams } from 'react-router-dom';
 import { CircularProgress, Container } from '@mui/material';
-import VersionHistoryList from '../components/VersionHistoryList';
 import { connect } from 'react-redux';
 import { getProject } from '../redux/actions/projectActions';
 
@@ -37,7 +36,6 @@ function ProjectPage({ project, loading, error, getProject}) {
     return (
         <Container maxWidth="md">
             <ProjectView project={project} />
-            <VersionHistoryList projectId={id} />
         </Container>
     );
 }

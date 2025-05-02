@@ -5,18 +5,19 @@ import MusicNotation from './MusicNotation';
 import { getTrack, updateTrack, updateMusicData } from '../redux/actions/trackActions';
 import { useParams, useNavigate } from 'react-router-dom';
 
-function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, updateMusicData}) {
+function TrackEditor({track, musicData, getTrack, updateTrack, updateMusicData}) {
     const {projectId, trackId} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
     const loading = useSelector(state => state.track.loading);
     const error = useSelector(state => state.track.error);
-    const track = trackFromProps
+    
 
     const [selectedNoteIndex, setSelectedNoteIndex] = useState(null);
     const [newKey, setNewKey] = useState('');
     const [newDuration, setNewDuration] = useState('q');
+    const [instrument, setInstrument] = useState(track?.instrument || '');
 
     const [keyToAdd, setKeyToAdd] = useState('c/4');
     const [durationToAdd, setDurationToAdd] = useState('q');
@@ -33,13 +34,14 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
     useEffect(() => {
         if (track && track.musicalSequence && track.musicalSequence !== musicData) {
             updateMusicData(track.musicalSequence)
+            setInstrument(track.instrument)
             setSelectedNoteIndex(null)
             setNewKey('');
             setNewDuration('q');
         }
         else if (track && !track.musicalSequence && !musicData)
             updateMusicData('[]')
-    }, [track, musicData, updateMusicData]);
+    }, [track]);
 
     const handleMusicDataChange = useCallback((newMusicData) => {
         dispatch(updateMusicData(JSON.stringify(newMusicData)));
@@ -67,7 +69,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
         if (!key || !duration) return;
         try {
             const currentNotes = JSON.parse(musicData || '[]');
-            const newNote = {keys: [key.split(',').map(k => k.trim())], duration};
+            const newNote = {keys: [key.trim()], duration};
             const newNotesData = [ ...currentNotes, newNote];
             handleMusicDataChange(newNotesData);
         } catch (error) {
@@ -112,6 +114,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
     const handleSave = () => {
         if (!track || !musicData) return;
         updateTrack(projectId, trackId, {
+            instrument,
             musicalSequence: musicData,
         });
         navigate(`/projects/${projectId}`);
@@ -145,7 +148,8 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
     return (
         <Box sx={{ mt: 4 }}>
             <Typography variant="h5" gutterBottom>Track Editor</Typography>
-            <Paper elevation={3} sx = {{p: 2, mb: 3}} >
+            {/* Details section(eg. name, instrument, etc)*/}
+            <Paper elevation={3} sx = {{p: 2, mb: 3, position: 'relative'}} >
                 <MusicNotation musicData={musicData} 
                     onMusicDataChange={handleMusicDataChange} 
                     clef={clef} 
@@ -153,10 +157,27 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                     selectedNoteIndex={selectedNoteIndex} 
                     onNoteClick={handleNoteClick} 
                 />
+                {/** put to the bottom right of musicNotation*/}
+                <Box sx={{
+                    position: 'absolute',
+                    bottom: 8, // Adjust spacing as needed
+                    right: 8, // Adjust spacing as needed
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Optional: Add a background for better visibility
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    boxShadow: 1,
+                    width: '300px',
+                    display: 'flex',
+                }} >
+                    <Stack spacing={2}>
+                        {/* <InputLabel id="track-instrument-label">Instrument</InputLabel> */}
+                        <TextField fullWidth size='small' label="Instrument" value={instrument} onChange={e => setInstrument(e.target.value)} />
+                    </Stack>
+                </Box>
             </Paper>
-                {/* Controls section */}
+            {/* Controls section */}
             <Grid container spacing={2} sx={{ mb: 2 }}>
-                <Grid xs={12} md={4}>
+                <Grid size={{xs:12, md:4}}>
                     <Paper elevation={1} sx={{ p: 2 }}>
                         <Typography variant="h6" gutterBottom>Settings</Typography>
                         <Stack spacing={2}>
@@ -199,7 +220,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                         </Stack>
                     </Paper>
                 </Grid>
-                <Grid xs={12} md={4}>
+                <Grid size={{xs:12, md:4}}>
                     <Paper elevation={1} sx={{ p: 2 }}>
                         <Typography variant="h6" gutterBottom >Add note</Typography>
                         <Stack spacing={2}>
@@ -230,7 +251,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                         </Stack>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid size={{xs:12, md:4}}>
                     <Paper elevation={1} sx={{ p: 2, mt: 2 }}>
                         <Typography variant="h6" gutterBottom>Edit/Remove</Typography>
                         <Stack spacing={2}>
@@ -239,7 +260,7 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                             { selectedNoteIndex !== null && (
                                 <Box sx={{mt: '2', p: 2, border: '1px solid lightgray', borderRadius: '1'}}>
                                     <Typography variant="subtitle1" >Edit Note {selectedNoteIndex + 1}</Typography>
-                                    <TextField fullwidth sx={{mr: 1}} size='small' label="Key" value={newKey} onChange={(e) => setNewKey(e.target.value)} />
+                                    <TextField sx={{mr: 1}} size='small' label="Key" value={newKey} onChange={(e) => setNewKey(e.target.value)} />
                                     <InputLabel id="duration-edit-label">Duration</InputLabel>
                                     <FormControl fullWidth size='small' sx={{ mb: 2 }}>
                                         <Select
@@ -269,9 +290,11 @@ function TrackEditor({track: trackFromProps, musicData, getTrack, updateTrack, u
                 </Grid>
             </Grid>
             {/* Save button */}
+            {loading ? 
+            <CircularProgress size={24} color="inherit"/> 
+            :
             <Button variant="contained" color="primary" onClick={handleSave} sx={{ mt: 3}} disabled={loading}>{loading ? <CircularProgress size = {24}/> : 'Save'}</Button>
-            {loading ? <CircularProgress size={24} color="inherit"/> : 'Save Track'}
-            <Button variant="contained" color="primary" onClick={handleSave}>Save</Button>
+            }
         </Box>
     );
 }

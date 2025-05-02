@@ -6,8 +6,6 @@ const userService = {
             const response = await api.post(`${API_BASE_URL}/auth/login`, { usernameOrEmail: loginDto.username, password: loginDto.password });
             const { username } = loginDto;
             localStorage.setItem('token', response.data.accessToken);
-            console.log("Login successful:", response.data);
-            console.log("Username:", username);
             return username;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Failed to login');

@@ -12,14 +12,14 @@ function SearchBar() {
 
     // Debounced search function
     const debouncedSearch = useCallback(
-        ()=>debounce((searchQuery) => {
+        debounce((searchQuery) => {
             if (searchQuery.trim()) {
                 dispatch(searchProjects(searchQuery));
             } else {
                 dispatch(clearSearchResults()); // Clear results if query is empty/whitespace
             }
         }, 500), // Adjust debounce time (ms) as needed
-        [dispatch] // dispatch is stable
+        [dispatch, setQuery] // dispatch is stable
     );
 
     const handleInputChange = (event) => {
@@ -42,22 +42,24 @@ function SearchBar() {
                 placeholder="Search projects by title or description..."
                 value={query}
                 onChange={handleInputChange}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    ),
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            {query && ( // Show clear button only when there's input
-                                <IconButton onClick={handleClear} edge="end" size="small">
-                                    <ClearIcon fontSize="small"/>
-                                </IconButton>
-                            )}
-                        </InputAdornment>
-                    ),
-                }}
+                slotProps={{input: 
+                    {
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                {query && ( // Show clear button only when there's input
+                                    <IconButton onClick={handleClear} edge="end" size="small">
+                                        <ClearIcon fontSize="small"/>
+                                    </IconButton>
+                                )}
+                            </InputAdornment>
+                        ),
+                    }}
+                }
             />
         </Box>
     );

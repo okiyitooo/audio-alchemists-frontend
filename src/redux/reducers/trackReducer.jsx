@@ -15,6 +15,7 @@ import {
     TRACK_DELETE_SUCCESS,
     TRACK_DELETE_FAILURE,
     TRACK_UPDATE_MUSIC_DATA,
+    PROJECT_GET_SUCCESS,
   } from '../actions/types';
 
 const initialState = {
@@ -22,6 +23,7 @@ const initialState = {
     loading: false,
     error: null,
     track: null,
+    musicData: null,
   };
   
   export const trackReducer = (state = initialState, action) => {
@@ -32,7 +34,8 @@ const initialState = {
       case TRACK_UPDATE_REQUEST:
       case TRACK_DELETE_REQUEST:
         return { ...state, loading: true, error: null };
-  
+      case PROJECT_GET_SUCCESS:
+        return { ...state, loading: false, error: null, tracks: [], musicData: null, track:[]};
       case TRACK_CREATE_SUCCESS:
         return { ...state, loading: false, tracks: [...state.tracks, action.payload], error: null };
       case TRACK_GET_ALL_SUCCESS:

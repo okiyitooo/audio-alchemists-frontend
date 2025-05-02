@@ -27,9 +27,8 @@ function EditProjectForm({ project, updateProject, loading, error }) {
             genre,
             tempo: parseInt(tempo),
         };
-        const success = await updateProject(project.id, projectData);
-        if (success)
-            navigate('/dashboard');
+        await updateProject(project.id, projectData);
+        navigate('/projects/'+project.id);
     }
 
     return (

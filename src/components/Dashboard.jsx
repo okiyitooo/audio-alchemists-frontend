@@ -42,8 +42,8 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
             return (
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                     {projects.map((project) => (
-                        <ListItem key={project.id} button component={Link} to={`/projects/${project.id}`}>
-                            <ListItemText primary={project.title} secondary={project.description} />
+                        <ListItem key={project.id} component={Link} to={`/projects/${project.id}`}>
+                            <Button variant="outlined" fullWidth><ListItemText primary={project.title} secondary={project.description} /></Button>
                         </ListItem>
                     ))}
                 </List>
@@ -73,7 +73,6 @@ function Dashboard({ projects, loading, error, getAllProjects, clearSearchResult
                             <RecommendedProjects />
                         </Box>
                     </Grid>
-                    {/* Add more dashboard content here (e.g., list of projects) */}
                 </Grid>
             </Box>
         </Container>

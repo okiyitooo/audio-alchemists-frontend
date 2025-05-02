@@ -76,29 +76,14 @@ export const saveNewVersion = (projectId, description) => async (dispatch, getSt
     dispatch(saveProjectVersionRequest());
     try {
         // Call the API service method
-        await projectService.saveNewVersion(projectId, description); // API call returns void or maybe the new version DTO
-        dispatch(saveProjectVersionSuccess()); // Indicate success
-        alert('Version saved successfully!'); // Simple user feedback
+        const newVersion = await projectService.saveNewVersion(projectId, description); // API call returns void or maybe the new version DTO
+        dispatch(saveProjectVersionSuccess(newVersion)); // Indicate success
 
-        // --- Option 1: Re-fetch the entire version list ---
-        // This is simpler but might fetch more data than needed
-        // const versions = await projectService.getProjectVersions(projectId);
-        // dispatch({ type: GET_PROJECT_VERSIONS_SUCCESS, payload: versions });
-
-        // --- Option 2: (If backend returns the new version) Update list incrementally ---
-        // const newVersionDto = await projectService.saveNewVersion(projectId, description);
-        // dispatch(saveProjectVersionSuccess(newVersionDto)); // Pass new version to reducer
-        // The reducer would then prepend this new version to the existing list (see reducer update)
-
-        // --- Option 3: Let VersionHistoryList re-fetch on its own ---
-        // If VersionHistoryList re-fetches when the save success happens (e.g., via a notification or state change),
-        // might not need to explicitly update the list here.
-
-        return true; // Indicate success for potential component logic
+        return true; 
     } catch (error) {
         dispatch(saveProjectVersionFailure(error.message || 'Failed to save version'));
         alert(`Failed to save version: ${error.message || 'Unknown error'}`); // Simple feedback
-        return false; // Indicate failure
+        return false; // Failure
     }
 };
 

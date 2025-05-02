@@ -1,13 +1,10 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Container, Box, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logout } from '../redux/actions/userActions';
 
 function Layout({ children }) {
-    const user = useSelector(state => {
-        return state.user.user
-    });
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -23,10 +20,10 @@ function Layout({ children }) {
                     <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }}>
                         Audio Alchemists
                     </Typography>
-                    {user ? (
+                    {localStorage.getItem('token') ? (
                         <>
                             <Button component={Link} to="/dashboard" color="inherit">Dashboard</Button>
-                            <Button onClick={handleLogout} color="inherit">Logout {user.username}</Button>
+                            <Button onClick={handleLogout} color="inherit">Logout</Button>
                         </>
                     ) : (
                         <>
@@ -47,4 +44,5 @@ function Layout({ children }) {
         </Box>
     );
 }
+
 export default Layout;

@@ -24,17 +24,27 @@ import {
     SEARCH_PROJECTS_SUCCESS,
     SEARCH_PROJECTS_FAILURE,
     CLEAR_SEARCH_RESULTS, // import clear action type
+    SAVE_PROJECT_VERSION_REQUEST,
+    SAVE_PROJECT_VERSION_SUCCESS,
+    SAVE_PROJECT_VERSION_FAILURE,
   } from '../actions/types';
 
 const initialState = {
     loading: false,
     projects: [],
     project: null,
-    versions: [],
-    reverting: false,
     error: null,
+    
+    versions: [],
+    versionsLoading: false,
     versionError: null,
+
+    isSavingVersion: false,
+    saveVersionError: null,
+    
+    isReverting: false,
     revertError: null,
+    
     searchResults: [], // Add state for search results
     searchLoading: false, // Add separate loading state for search
     searchError: null, // Add separate error state for search
@@ -66,18 +76,22 @@ export const projectReducer = (state = initialState, action) => {
         case PROJECT_UPDATE_FAILURE:
         case PROJECT_DELETE_FAILURE:
             return { ...state, loading: false, error: action.payload };
+        
+        // --- Version History Cases ---
         case GET_PROJECT_VERSIONS_REQUEST:
-            return { ...state, loading: true, versionError: null, versions: [] };
+            return { ...state, versionsLoading: true, versionError: null, versions: [] };
         case GET_PROJECT_VERSIONS_SUCCESS:
-            return { ...state, loading: false, versions: action.payload, versionError: null };
+            return {...state, versionsLoading: false, versions: action.payload, versionError: null}
         case GET_PROJECT_VERSIONS_FAILURE:
-            return { ...state, loading: false, versionError: action.payload, versions: [] };
+            return { ...state, versionsLoading: false, versionError: action.payload, versions: [] };
+       
+        // --- Version Revert Cases ---
         case REVERT_PROJECT_REQUEST:
-            return { ...state, reverting: true, revertError: null };
+            return { ...state, isReverting: true, revertError: null };
         case REVERT_PROJECT_SUCCESS:
-            return { ...state, reverting: false, revertError: null };
+            return { ...state, isReverting: false, revertError: null };
         case REVERT_PROJECT_FAILURE:
-            return { ...state, reverting: false, revertError: action.payload };
+            return { ...state, isReverting: false, revertError: action.payload };
 
         // --- Search Cases ---
         case SEARCH_PROJECTS_REQUEST:
@@ -88,7 +102,16 @@ export const projectReducer = (state = initialState, action) => {
             return { ...state, searchLoading: false, searchResults: [], searchError: action.payload };
         case CLEAR_SEARCH_RESULTS:
             return { ...state, searchResults: [], searchLoading: false, searchError: null }; // Clear results and reset states
-        // --- End Search Cases ---
+        
+        // --- Save Version Cases ---
+        case SAVE_PROJECT_VERSION_REQUEST:
+            return { ...state, isSavingVersion: true, saveVersionError: null };
+        case SAVE_PROJECT_VERSION_SUCCESS:
+            const newVersion = action.payload;
+            return { ...state, isSavingVersion: false, saveVersionError: null, versions: newVersion ? [newVersion, ...state.versions] : state.versions };
+        case SAVE_PROJECT_VERSION_FAILURE:
+            return { ...state, isSavingVersion: false, saveVersionError: action.payload };
+        // --- End Save Version Cases ---
         default:
             return state;
     }

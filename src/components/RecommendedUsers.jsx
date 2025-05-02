@@ -13,9 +13,8 @@ function RecommendedUsers() {
     const { followingInProgress } = useSelector((state) => state.follow);
 
     useEffect(() => {
-        if (currentUser)
             dispatch(fetchUserRecommendations());
-    }, [dispatch, currentUser]);
+    }, [dispatch]);
 
     const handleFollowToggle = (userIdToToggle) => {
         if (!currentUser) return; // Must be logged in

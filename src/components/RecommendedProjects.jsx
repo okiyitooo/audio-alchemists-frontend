@@ -21,7 +21,13 @@ function RecommendedProjects() {
     }
 
     if (!projectRecs || projectRecs.length === 0) {
-        return null; // Don't render anything if no recommendations
+        return (
+            <Paper elevation={1} sx={{ p: 2, mt: 3 }}>
+                <Typography variant="h6" gutterBottom>No Project Recommendations</Typography>
+                <Typography variant="body2">Collaborate on more projects to get better recommendations.</Typography>
+            </Paper>
+            )
+
     }
 
     return (

@@ -32,13 +32,13 @@ function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNot
         const notes = notesData.length > 0 ? notesData.map((noteInfo, index) => {
             try {
                 const staveNote = new VF.StaveNote(noteInfo);
-                staveNote.setAttribute('id', `vf-note-${index}`);
+                staveNote.setAttribute('id', index);
                 staveNote.setAttribute('data-index', index);
                 staveNote.setAttribute('class', 'vf-stavenote');
                 if (selectedNoteIndex === index) {
                     staveNote.setAttribute('class', 'vf-stavenote selected');
                 }
-                staveNote.setContext(context).draw();
+                staveNote.setContext(context);
                 return staveNote;
             } catch(noteError) {
                 console.error("Error creating note at index:", index, noteInfo, noteError);
@@ -47,7 +47,7 @@ function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNot
         }).filter(note => note !== null) : [];
 
         if (notes.length === 0) return; // No valid notes to draw
-        const voice = new VF.Voice({ num_beats: parseInt(timeSignature.split('/')[0]),  beat_value: parseInt(timeSignature.split('/')[1]) });
+        const voice = new VF.Voice({ num_beats: parseInt(timeSignature.split('/')[0]),  beat_value: parseInt(timeSignature.split('/')[1]) }).setMode(2);
         voice.addTickables(notes);
         voice.setStrict(false);
         try {
@@ -65,7 +65,8 @@ function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNot
                     target = target.parentElement;
                 }
                 if (target) {
-                    const index = parseInt(target.getAttribute('data-index'));
+                    const index = parseInt(target.getAttribute('id').replace('vf-', ''));
+                    console.log("target",target, "index", index)
                     if (!isNaN(index) && index >= 0 && index < notesData.length) 
                         onNoteClick(index);
                 } else {

@@ -3,42 +3,34 @@ import {
     Box, Typography, Paper, List, ListItem, ListItemText, Button, Divider,
     TextField, CircularProgress, Alert, Chip, Avatar // Added Chip, Avatar
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { Link, } from 'react-router-dom';
+import { connect, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add'; // For Create Track button
 import EditIcon from '@mui/icons-material/Edit'; // For Edit Project button
 import SaveIcon from '@mui/icons-material/Save'; // For Save Version button
 
 // --- Import Redux Actions ---
-import { updateProject, saveNewVersion } from '../redux/actions/projectActions'; // Assuming saveNewVersion exists
+import { updateProject, saveNewVersion } from '../redux/actions/projectActions';
 import { getAllTracks } from '../redux/actions/trackActions'; // Action to get tracks for this project
 import { getAllComments, createComment } from '../redux/actions/commentActions'; // Actions for comments
 
 // --- Import Child Components ---
 import VersionHistoryList from './VersionHistoryList';
+import AddTrackModal from './AddTrackModal';
+
+// --- Import Other Dependencies ---
+import { formatDistanceToNow } from 'date-fns';
 
 // Receive the main 'project' object as a prop from ProjectPage
 function ProjectView({
     project,
     // Props from connect/Redux for related data
-    tracks,
-    comments,
-    isTracksLoading,
-    tracksError,
-    isCommentsLoading,
-    commentsError,
-    isCreatingComment,
-    createCommentError,
-    isSavingVersion,
-    saveVersionError,
+    tracks, comments, isTracksLoading, tracksError, isCommentsLoading, commentsError, isCreatingComment, createCommentError,isSavingVersion, saveVersionError,
     // Action dispatchers from connect
-    getAllTracks,
-    getAllComments,
-    createComment,
-    saveNewVersion
-}) {
-    const navigate = useNavigate();
-    const dispatch = useDispatch(); // Use dispatch directly for some actions if preferred
+    getAllTracks, getAllComments, createComment, saveNewVersion}) 
+    {
+
+    const [isAddTrackModalOpen, setIsAddTrackModalOpen] = useState(false);
     const [newCommentText, setNewCommentText] = useState('');
     const currentUser = useSelector(state => state.user.user); // Get current user for comments etc.
 
@@ -69,11 +61,20 @@ function ProjectView({
 
     const handleSaveVersion = useCallback(() => {
         if (!project) return;
-        // Prompt for description or use a default? For simplicity, using default.
         const description = `Manual save by ${currentUser?.username || 'user'}`;
-        saveNewVersion(project.id, description); // Dispatch the save version action
+        saveNewVersion(project.id, description); 
     }, [project, currentUser, saveNewVersion]);
 
+
+    // --- Modal Logic ---
+
+    const handleOpenAddTrackModal = () => {
+        setIsAddTrackModalOpen(true);
+    };
+
+    const handleCloseAddTrackModal = () => {
+        setIsAddTrackModalOpen(false);
+    };
 
     // --- Render Logic ---
 
@@ -128,7 +129,8 @@ function ProjectView({
                         size="small"
                         startIcon={<AddIcon />}
                         // onClick={() => { /* TODO: Implement track creation trigger */ }}
-                        disabled // Disable until implemented
+                        onClick={handleOpenAddTrackModal}
+                        disabled={!project}
                     >
                         Add Track
                     </Button>
@@ -139,19 +141,20 @@ function ProjectView({
                 {!isTracksLoading && !tracksError && tracks && tracks.length > 0 ? (
                     <List dense>
                         {tracks.map(track => (
-                            <ListItem
-                                key={track.id}
-                                button
-                                component={Link}
-                                to={`/projects/${project.id}/tracks/${track.id}`} // Link to TrackEditor
-                                divider
-                            >
-                                <ListItemText
-                                    primary={track.instrument || `Track ${track.id}`}
-                                    // secondary={`Last updated: ${formatDistanceToNow(new Date(track.updatedAt))} ago`} // Example using date-fns
-                                />
-                                {/* Add play button or other track actions here? */}
-                            </ListItem>
+                            <Button fullWidth>
+                                <ListItem
+                                    key={track.id}
+                                    component={Link}
+                                    to={`/projects/${project.id}/tracks/${track.id}`} // Link to TrackEditor
+                                    divider
+                                >
+                                    <ListItemText
+                                        primary={track.instrument || `Track ${track.id}`}
+                                        secondary={`Last updated: ${formatDistanceToNow(new Date(track.updatedAt))} ago`} // using date-fns
+                                    />
+                                    {/* Add play button or other track actions here? */}
+                                </ListItem>
+                            </Button>
                         ))}
                     </List>
                 ) : (
@@ -203,7 +206,7 @@ function ProjectView({
                         {isCreatingComment ? <CircularProgress size={20} /> : 'Post'}
                     </Button>
                 </Box>
-                 {createCommentError && <Alert severity="error" sx={{ mt: 1 }}>{createCommentError}</Alert>}
+                {createCommentError && <Alert severity="error" sx={{ mt: 1 }}>{createCommentError}</Alert>}
             </Paper>
 
              {/* Version History Section */}
@@ -224,7 +227,11 @@ function ProjectView({
                  <Divider sx={{ mb: 2 }} />
                  <VersionHistoryList projectId={project.id} />
              </Paper>
-
+             <AddTrackModal
+                open={isAddTrackModalOpen}
+                onClose={handleCloseAddTrackModal}
+                projectId={project.id} // Pass the current project ID
+            />
         </Box>
     );
 }
@@ -243,11 +250,11 @@ const mapStateToProps = (state) => ({
     saveVersionError: state.project.error, 
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = ({
     getAllTracks,
     getAllComments,
     createComment,
     saveNewVersion,
-};
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectView);
