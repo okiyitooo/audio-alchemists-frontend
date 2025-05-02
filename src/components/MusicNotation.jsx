@@ -66,7 +66,7 @@ function MusicNotation({musicData, clef, timeSignature, selectedNoteIndex, onNot
                 }
                 if (target) {
                     const index = parseInt(target.getAttribute('id').replace('vf-', ''));
-                    console.log("target",target, "index", index)
+                    // console.log("target",target, "index", index)
                     if (!isNaN(index) && index >= 0 && index < notesData.length) 
                         onNoteClick(index);
                 } else {
